@@ -14,7 +14,7 @@ import random
 # import ipdb
 
 # --------
-# Datasets CIFAR and TINYIMAGENET
+# Datasets CIFAR, SVHN and TINYIMAGENET
 # --------
 
 class IncrementalLoader:
@@ -183,6 +183,27 @@ class IncrementalLoader:
                     x_train, y_train, validation_split
                 )
                 x_test, y_test = test_dataset.data, np.array(test_dataset.targets)
+
+                order = [i for i in range(len(np.unique(y_train)))]
+                if class_order_type == 'random':
+                    random.seed(seed)  # Ensure that following order is determined by seed:
+                    random.shuffle(order)
+                    print("Class order:", order)
+                elif class_order_type == 'old' and dataset.class_order is not None:
+                    order = dataset.class_order
+                else:
+                    print("Classes are presented in a chronological order")
+
+            elif(self._opt.dataset == 'svhn'):
+                root_path = self._opt.data_path
+                train_dataset = dataset.base_dataset(root_path + 'train/',download=True,split='train')
+                test_dataset = dataset.base_dataset(root_path + 'val/',download=True,split='test')
+                # print(train_dataset.dict)
+                x_train, y_train = train_dataset.data, np.array(train_dataset.labels)
+                x_val, y_val, x_train, y_train = self._list_split_per_class(
+                    x_train, y_train, validation_split
+                )
+                x_test, y_test = test_dataset.data, np.array(test_dataset.labels)
 
                 order = [i for i in range(len(np.unique(y_train)))]
                 if class_order_type == 'random':
