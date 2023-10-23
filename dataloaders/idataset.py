@@ -83,6 +83,7 @@ def _get_dataset(dataset_name):
     if dataset_name == "cifar10": return iCIFAR10
     elif dataset_name == "cifar100": return iCIFAR100
     elif dataset_name == "tinyimagenet": return iImgnet
+    elif dataset_name == "svhn": return iSVHN
     else: raise NotImplementedError("Unknown dataset {}.".format(dataset_name))
 
 # a class created for nothing ??
@@ -171,3 +172,28 @@ class iCIFAR100(iCIFAR10):
         63, 64, 45, 99, 26, 77, 79, 46, 98, 11, 2, 35, 93, 78, 44, 29, 27, 80, 65, 74, 50,
         36, 52, 96, 56, 47, 59, 90, 58, 48, 13, 8, 69, 81, 41, 89, 85
     ]   ## parent-wise split
+
+class iSVHN(DataHandler):
+     # get an object
+    base_dataset = datasets.svhn.SVHN
+
+    top_transforms = [
+        lambda x: Image.open(x[0]).convert('RGB'),
+    ]
+
+    train_transforms = [
+        transforms.RandomCrop(32, padding=4),           
+        transforms.RandomHorizontalFlip() #,
+        #transforms.ColorJitter(brightness=63 / 255)
+    ]
+
+    common_transforms = [
+        transforms.Resize((32, 32)),
+        transforms.ToTensor(),
+        # transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225))    
+    ]
+
+    class_order = [                                                                     
+        i for i in range(200)
+    ]
