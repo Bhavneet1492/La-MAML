@@ -45,8 +45,12 @@ class IncrementalLoader:
             raise Exception("No more tasks.")
 
         p = self.sample_permutations[self._current_task]
-        x_train, y_train = self.train_dataset[self._current_task][1][p], self.train_dataset[self._current_task][2][p]
-        x_test, y_test = self.test_dataset[self._current_task][1], self.test_dataset[self._current_task][2]
+        try:
+          x_train, y_train = self.train_dataset[self._current_task][1][p], self.train_dataset[self._current_task][2][p]
+          x_test, y_test = self.test_dataset[self._current_task][1], self.test_dataset[self._current_task][2]
+        except:
+          x_train, y_train = self.train_dataset[self._current_task][0][p], self.train_dataset[self._current_task][1][p]
+          x_test, y_test = self.test_dataset[self._current_task][0], self.test_dataset[self._current_task][1]
 
         train_loader = self._get_loader(x_train, y_train, mode="train")
         test_loader = self._get_loader(x_test, y_test, mode="test")
@@ -68,7 +72,10 @@ class IncrementalLoader:
     def _setup_test_tasks(self):
         self.test_tasks = []
         for i in range(len(self.test_dataset)):
+          try:
             self.test_tasks.append(self._get_loader(self.test_dataset[i][1], self.test_dataset[i][2], mode="test"))
+          except:
+            self.test_tasks.append(self._get_loader(self.test_dataset[i][0], self.test_dataset[i][1], mode="test"))
 
     def get_tasks(self, dataset_type='test'):
         if dataset_type == 'test':
@@ -79,11 +86,18 @@ class IncrementalLoader:
             raise NotImplementedError("Unknown mode {}.".format(dataset_type))
 
     def get_dataset_info(self):
-        n_inputs = self.train_dataset[0][1].size(1)
+        try:
+          n_inputs = self.train_dataset[0][1].size(1)
+        except:
+          n_inputs = self.train_dataset[0][0].size(1)
         n_outputs = 0
         for i in range(len(self.train_dataset)):
+          try:
             n_outputs = max(n_outputs, self.train_dataset[i][2].max())
             n_outputs = max(n_outputs, self.test_dataset[i][2].max())
+          except:
+            n_outputs = max(n_outputs, self.train_dataset[i][1].max())
+            n_outputs = max(n_outputs, self.test_dataset[i][1].max())
         self.n_outputs = n_outputs
         return n_inputs, n_outputs.item()+1, self.n_tasks
 
@@ -110,12 +124,20 @@ class IncrementalLoader:
 
         # print('been here', self._opt.data_path, self._opt.dataset + ".pt")
         self.train_dataset, self.test_dataset = torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))
-        # print('passed here')
+        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0]))
+        print("\n\n-----------------\n\n")
+        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0]))
+        print("\n\n-----------------\n\n")
+        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0][0]))
         self.sample_permutations = []
 
         # for every task, accumulate a shuffled set of samples_per_task
         for t in range(len(self.train_dataset)):
-            N = self.train_dataset[t][1].size(0)
+            try:
+              N = self.train_dataset[t][2].size(0)
+              N = self.train_dataset[t][1].size(0)
+            except:
+              N = self.train_dataset[t][0].size(0)
             if self._opt.samples_per_task <= 0:
                 n = N
             else:
