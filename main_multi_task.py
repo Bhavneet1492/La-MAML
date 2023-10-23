@@ -24,7 +24,7 @@ def eval_iid_tasks(model, tasks, args):
 def life_experience_iid(model, inc_loader, args):
     import wandb
 
-    wandb.init(project="rc2020", entity="joeljosephjin")
+    wandb.init(project="La-MAML", entity="glitchfilter")
 
     result_val_a = []
     result_test_a = []
