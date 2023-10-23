@@ -46,6 +46,31 @@ class ModelFactory():
                     ('linear', [sizes[-1], 640], '')
                 ]
 
+        elif dataset == "svhn":
+
+          if model_type == 'pc_cnn':
+                channels = 160
+                return [
+                    ('conv2d', [channels, 3, 3, 3, 2, 1], ''),
+                    ('relu', [True], ''),
+                    
+                    ('conv2d', [channels, channels, 3, 3, 2, 1], ''),
+                    ('relu', [True], ''),
+
+                    ('conv2d', [channels, channels, 3, 3, 2, 1], ''),
+                    ('relu', [True], ''),
+
+                    ('flatten', [], ''),
+                    ('rep', [], ''),
+
+                    ('linear', [320, 16 * channels], ''),
+                    ('relu', [True], ''),
+
+                    ('linear', [320, 320], ''),
+                    ('relu', [True], ''),
+                    ('linear', [sizes[-1], 320], '')
+                ]
+        
         elif dataset == "cifar100":
 
 
@@ -75,7 +100,3 @@ class ModelFactory():
         else:
             print("Unsupported model; either implement the model in model/ModelFactory or choose a different model")
             assert (False)
-
-
-
- 
