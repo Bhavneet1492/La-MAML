@@ -17,6 +17,16 @@ class ModelFactory():
                     if i == (len(sizes) - 2):
                         net_list.append(('rep', [], ''))
                 return net_list
+        
+        elif dataset == "svhn":
+            if model_type=="linear":
+                  for i in range(0, len(sizes) - 1):
+                      net_list.append(('linear', [sizes[i+1], sizes[i]], ''))
+                      if i < (len(sizes) - 2):
+                          net_list.append(('relu', [True], ''))
+                      if i == (len(sizes) - 2):
+                          net_list.append(('rep', [], ''))
+                  return net_list
 
         elif dataset == "tinyimagenet":
 
