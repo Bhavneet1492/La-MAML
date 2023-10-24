@@ -26,8 +26,9 @@ def get_datasets():
     mnist_rotations = "https://nlp.stanford.edu/data/mer/mnist_rotations.tar.gz"
     mnist_permutations = "https://nlp.stanford.edu/data/mer/mnist_permutations.tar.gz"
     mnist_many = "https://nlp.stanford.edu/data/mer/mnist_manypermutations.tar.gz"
+    svhn = "http://ufldl.stanford.edu/housenumbers/train.tar.gz"
 
-    all = {"rotations": mnist_rotations, "permutations": mnist_permutations, "manypermutations": mnist_many}
+    all = {"svhn":svhn,"rotations": mnist_rotations, "permutations": mnist_permutations, "manypermutations": mnist_many}
 
     if args.dataset == "all":
         for dataset in all.values():
