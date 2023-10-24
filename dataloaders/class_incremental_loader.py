@@ -202,11 +202,11 @@ class IncrementalLoader:
                 # train_dataset.data = train_dataset.samples
                 # test_dataset.data = test_dataset.samples
 
-                x_train, y_train = train_dataset.data, np.array(train_dataset.lables)
+                x_train, y_train = train_dataset.data, np.array(train_dataset.labels)
                 x_val, y_val, x_train, y_train = self._list_split_per_class(
                     x_train, y_train, validation_split
                 )
-                x_test, y_test = test_dataset.data, np.array(test_dataset.lables)
+                x_test, y_test = test_dataset.data, np.array(test_dataset.labels)
 
                 order = [i for i in range(len(np.unique(y_train)))]
                 if class_order_type == 'random':
