@@ -7,10 +7,11 @@ from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision import datasets, transforms
 
+# the _get_datasets deals with getting the thing from the file i guess
 from dataloaders.idataset import _get_datasets, DummyDataset
 
 import random
-import ipdb
+# import ipdb
 
 # --------
 # Datasets CIFAR and TINYIMAGENET
@@ -29,7 +30,9 @@ class IncrementalLoader:
         validation_split=opt.validation
         self.increment=opt.increment
 
+        # this is where the dataset is really loaded from the file i guess
         datasets = _get_datasets(dataset_name)
+        
         self._setup_data(
             datasets,
             class_order_type=opt.class_order,
@@ -193,17 +196,17 @@ class IncrementalLoader:
 
             elif(self._opt.dataset == 'svhn'):
                 root_path = self._opt.data_path
-                train_dataset = dataset.base_dataset(root_path + 'train/',download=True,split='train')
-                test_dataset = dataset.base_dataset(root_path + 'test/',download=True,split='test')
+                train_dataset = dataset.base_dataset(root_path + 'train/', download=True, split='train')
+                test_dataset = dataset.base_dataset(root_path + 'test/', download=True, split='test')
 
                 # train_dataset.data = train_dataset.samples
                 # test_dataset.data = test_dataset.samples
 
-                x_train, y_train = train_dataset.data, np.array(train_dataset.labels)
+                x_train, y_train = train_dataset.data, np.array(train_dataset.lables)
                 x_val, y_val, x_train, y_train = self._list_split_per_class(
                     x_train, y_train, validation_split
                 )
-                x_test, y_test = test_dataset.data, np.array(test_dataset.labels)
+                x_test, y_test = test_dataset.data, np.array(test_dataset.lables)
 
                 order = [i for i in range(len(np.unique(y_train)))]
                 if class_order_type == 'random':
