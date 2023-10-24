@@ -64,7 +64,10 @@ class DummyArrayDataset(torch.utils.data.Dataset):
 
     # simple return the idx-th item. [no transforms, no array-izing or supers]
     def __getitem__(self, idx):
+      try:
         x, y = self.x[idx], self.y[idx]
+      except:
+        x,y=self.x,self.y
 
         return x, y
 
