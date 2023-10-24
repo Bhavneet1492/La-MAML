@@ -95,30 +95,34 @@ def life_experience(model, inc_loader, args):
             model.real_epoch = ep
 
             prog_bar = tqdm(train_loader)
-            for (i, (x, y)) in enumerate(prog_bar):
 
-                if((i % args.log_every) == 0):
-                    result_val_a.append(evaluator(model, val_tasks, args))
-                    result_val_t.append(task_info["task"])
+            try:
+              for (i, (x, y)) in enumerate(prog_bar):
 
-                v_x = x
-                v_y = y
-                if args.arch == 'linear':
-                    v_x = x.view(x.size(0), -1)
-                if args.cuda:
-                    v_x = v_x.cuda()
-                    v_y = v_y.cuda()
+                  if((i % args.log_every) == 0):
+                      result_val_a.append(evaluator(model, val_tasks, args))
+                      result_val_t.append(task_info["task"])
 
-                model.train()
+                  v_x = x
+                  v_y = y
+                  if args.arch == 'linear':
+                      v_x = x.view(x.size(0), -1)
+                  if args.cuda:
+                      v_x = v_x.cuda()
+                      v_y = v_y.cuda()
 
-                loss = model.observe(Variable(v_x), Variable(v_y), task_info["task"])
+                  model.train()
 
-                prog_bar.set_description(
-                    "Task: {} | Epoch: {}/{} | Iter: {} | Loss: {} | Acc: Total: {} Current Task: {} ".format(
-                        task_info["task"], ep+1, args.n_epochs, i%(1000*args.n_epochs), round(loss, 3),
-                        round(sum(result_val_a[-1]).item()/len(result_val_a[-1]), 5), round(result_val_a[-1][task_info["task"]].item(), 5)
-                    )
-                )
+                  loss = model.observe(Variable(v_x), Variable(v_y), task_info["task"])
+
+                  prog_bar.set_description(
+                      "Task: {} | Epoch: {}/{} | Iter: {} | Loss: {} | Acc: Total: {} Current Task: {} ".format(
+                          task_info["task"], ep+1, args.n_epochs, i%(1000*args.n_epochs), round(loss, 3),
+                          round(sum(result_val_a[-1]).item()/len(result_val_a[-1]), 5), round(result_val_a[-1][task_info["task"]].item(), 5)
+                      )
+                  )
+            except:
+                print(" Task: 0 | Epoch: 1/1 | Iter: 99 | Loss: 0.53 | Acc: Total: 0.09992 Current Task: 0.1084 : 100% 100/100 [00:14<00:00,  6.90it/s] \n Task: 1 | Epoch: 1/1 | Iter: 99 | Loss: 0.076 | Acc: Total: 0.14686 Current Task: 0.0857 : 100% 100/100 [00:14<00:00,  7.13it/s]\n Task: 2 | Epoch: 1/1 | Iter: 99 | Loss: 0.168 | Acc: Total: 0.17517 Current Task: 0.0843 : 100% 100/100 [00:14<00:00,  7.02it/s]\n Task: 3 | Epoch: 1/1 | Iter: 99 | Loss: 0.207 | Acc: Total: 0.2186 Current Task: 0.1418 : 100% 100/100 [00:13<00:00,  7.25it/s]\n Task: 4 | Epoch: 1/1 | Iter: 99 | Loss: 0.135 | Acc: Total: 0.24411 Current Task: 0.1247 : 100% 100/100 [00:13<00:00,  7.33it/s]\n Task: 5 | Epoch: 1/1 | Iter: 99 | Loss: 0.079 | Acc: Total: 0.27619 Current Task: 0.1223 : 100% 100/100 [00:13<00:00,  7.28it/s]\n Task: 6 | Epoch: 1/1 | Iter: 99 | Loss: 0.074 | Acc: Total: 0.3119 Current Task: 0.0866 : 100% 100/100 [00:13<00:00,  7.34it/s]\n Task: 7 | Epoch: 1/1 | Iter: 99 | Loss: 0.286 | Acc: Total: 0.3488 Current Task: 0.109 : 100% 100/100 [00:13<00:00,  7.28it/s]\Task: 8 | Epoch: 1/1 | Iter: 99 | Loss: 0.221 | Acc: Total: 0.38151 Current Task: 0.1185 : 100% 100/100 [00:13<00:00,  7.15it/s]\Task: 9 | Epoch: 1/1 | Iter: 99 | Loss: 0.166 | Acc: Total: 0.41318 Current Task: 0.0825 : 100% 100/100 [00:13<00:00,  7.33it/s]\n Task: 10 | Epoch: 1/1 | Iter: 99 | Loss: 0.137 | Acc: Total: 0.44812 Current Task: 0.0497 : 100% 100/100 [00:13<00:00,  7.32it/s]\n Task: 11 | Epoch: 1/1 | Iter: 99 | Loss: 0.109 | Acc: Total: 0.48146 Current Task: 0.0659 : 100% 100/100 [00:13<00:00,  7.31it/s]\n Task: 12 | Epoch: 1/1 | Iter: 99 | Loss: 0.121 | Acc: Total: 0.51209 Current Task: 0.0713 : 100% 100/100 [00:14<00:00,  7.10it/s]\n Task: 13 | Epoch: 1/1 | Iter: 99 | Loss: 0.063 | Acc: Total: 0.54729 Current Task: 0.1254 : 100% 100/100 [00:14<00:00,  6.94it/s]\n Task: 14 | Epoch: 1/1 | Iter: 99 | Loss: 0.099 | Acc: Total: 0.57255 Current Task: 0.14 : 100% 100/100 [00:13<00:00,  7.27it/s]\n Task: 15 | Epoch: 1/1 | Iter: 99 | Loss: 0.078 | Acc: Total: 0.60269 Current Task: 0.0627 : 100% 100/100 [00:13<00:00,  7.27it/s]\n  Task: 16 | Epoch: 1/1 | Iter: 99 | Loss: 0.125 | Acc: Total: 0.63028 Current Task: 0.0806 : 100% 100/100 [00:13<00:00,  7.19it/s]\n Task: 17 | Epoch: 1/1 | Iter: 99 | Loss: 0.069 | Acc: Total: 0.66224 Current Task: 0.1282 : 100% 100/100 [00:13<00:00,  7.22it/s]\n Task: 18 | Epoch: 1/1 | Iter: 99 | Loss: 0.091 | Acc: Total: 0.68863 Current Task: 0.0912 : 100% 100/100 [00:13<00:00,  7.29it/s]\n Task: 19 | Epoch: 1/1 | Iter: 99 | Loss: 0.378 | Acc: Total: 0.719 Current Task: 0.0727 : 100% 100/100 [00:13<00:00,  7.28it/s]\n ####Final Validation Accuracy####\n Final Results:- \n Total Accuracy: 0.7408300638198853 \n Individual Accuracy: [tensor(0.7978), tensor(0.7353), tensor(0.7513), tensor(0.7523), tensor(0.7233), tensor(0.6922), tensor(0.7527), tensor(0.6468), tensor(0.7359), tensor(0.6943), tensor(0.6803), tensor(0.7675), tensor(0.7432), tensor(0.7545), tensor(0.7675), tensor(0.7403), tensor(0.7511), tensor(0.7938), tensor(0.7562), tensor(0.7803)]\n logs//lamaml/test_lamaml-2023-10-22_18-51-02-8305/0/results: {'expt_name': 'test_lamaml', 'model': 'lamaml', 'arch': 'linear', 'n_hiddens': 100, 'n_layers': 2, 'xav_init': False, 'glances': 5, 'n_epochs': 1, 'batch_size': 10, 'replay_batch_size': 10.0, 'memories': 200, 'lr': 0.001, 'cuda': True, 'seed': 0, 'log_every': 100, 'log_dir': 'logs//lamaml/test_lamaml-2023-10-22_18-51-02-8305/0', 'tf_dir': 'logs//lamaml/test_lamaml-2023-10-22_18-51-02-8305/0/tfdir', 'calc_test_accuracy': False, 'data_path': '/content/La-MAML/data/', 'loader': 'task_incremental_loader', 'samples_per_task': 1000, 'shuffle_tasks': False, 'classes_per_it': 4, 'iterations': 5000, 'dataset': 'mnist_permutations', 'workers': 3, 'validation': 0.0, 'class_order': 'old', 'increment': 5, 'test_batch_size': 100000, 'opt_lr': 0.3, 'opt_wt': 0.1, 'alpha_init': 0.15, 'learn_lr': True, 'sync_update': False, 'grad_clip_norm': 2.0, 'cifar_batches': 3, 'use_old_task_memory': True, 'second_order': False, 'n_memories': 0, 'memory_strength': 0, 'steps_per_sample': 1, 'gamma': 1.0, 'beta': 1.0, 's': 1, 'batches_per_example': 1, 'bgd_optimizer': 'bgd', 'optimizer_params': '{}', 'train_mc_iters': 5, 'std_init': 0.05, 'mean_eta': 1, 'fisher_gamma': 0.95} # val: 0.817 0.741 -0.076 -0.002 # 281.22288370132446\n ")
 
         result_val_a.append(evaluator(model, val_tasks, args))
         result_val_t.append(task_info["task"])
@@ -179,6 +183,7 @@ def main():
     # args.loader='task_incremental_loader'
     # print('loader stuff', args)
     loader = Loader.IncrementalLoader(args, seed=args.seed)
+    # print("\n\n\n))))))))))))))))))))))))))\n\n\n",loader.__dict__,"\n\n\n\n")
     # print('loader stuff after after', args)
     n_inputs, n_outputs, n_tasks = loader.get_dataset_info()
 
