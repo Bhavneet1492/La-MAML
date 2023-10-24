@@ -89,7 +89,7 @@ class IncrementalLoader:
         try:
           n_inputs = self.train_dataset[0][1].size(1)
         except:
-          n_inputs = self.train_dataset[0][0].size(1)
+          n_inputs = self.train_dataset[0][0].shape[1]
         n_outputs = 0
         for i in range(len(self.train_dataset)):
           try:
@@ -124,11 +124,11 @@ class IncrementalLoader:
 
         # print('been here', self._opt.data_path, self._opt.dataset + ".pt")
         self.train_dataset, self.test_dataset = torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))
-        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0]))
-        print("\n\n-----------------\n\n")
-        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0]))
-        print("\n\n-----------------\n\n")
-        print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0][0]))
+        # print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0]))
+        # print("\n\n-----------------\n\n")
+        # print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0]))
+        # print("\n\n-----------------\n\n")
+        # print((torch.load(os.path.join(self._opt.data_path, self._opt.dataset + ".pt"))[0][0][0]))
         self.sample_permutations = []
 
         # for every task, accumulate a shuffled set of samples_per_task
@@ -137,7 +137,8 @@ class IncrementalLoader:
               N = self.train_dataset[t][2].size(0)
               N = self.train_dataset[t][1].size(0)
             except:
-              N = self.train_dataset[t][0].size(0)
+              # print(self.train_dataset[t][0])
+              N = self.train_dataset[t][0].shape[0]
             if self._opt.samples_per_task <= 0:
                 n = N
             else:
