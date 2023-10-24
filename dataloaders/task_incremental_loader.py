@@ -49,7 +49,7 @@ class IncrementalLoader:
           x_train, y_train = self.train_dataset[self._current_task][1][p], self.train_dataset[self._current_task][2][p]
           x_test, y_test = self.test_dataset[self._current_task][1], self.test_dataset[self._current_task][2]
         except:
-          x_train, y_train = self.train_dataset[self._current_task][0][p], self.train_dataset[self._current_task][1][p]
+          x_train, y_train = self.train_dataset[self._current_task][0][p], self.train_dataset[self._current_task][1]
           x_test, y_test = self.test_dataset[self._current_task][0], self.test_dataset[self._current_task][1]
 
         train_loader = self._get_loader(x_train, y_train, mode="train")
